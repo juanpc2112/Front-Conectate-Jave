@@ -144,6 +144,9 @@ button, input, select {
   margin-top: -12px;
 }
 .submit {
+  border: 0;
+  color: white;
+  cursor: pointer;
   display: grid;
   place-items: center;
   background: var(--cyan);
@@ -153,6 +156,10 @@ button, input, select {
   font-weight: 600;
   margin-top: 2px;
 }
+.submit:disabled { opacity: .65; cursor: wait; }
+.form-error { margin: 0; color: #ff8d93; font-size: 12px; }
+.forgot summary { cursor: pointer; }
+.forgot form { margin-top: 12px; }
 .submit:hover {
   background: #50adc2;
 }
@@ -177,6 +184,7 @@ button, input, select {
 }
 .signup a {
   margin-left: 5px;
+  color: #42bdd7;
 }
 .app-shell {
   min-height: 100svh;
@@ -207,12 +215,11 @@ button, input, select {
   border-radius: 8px;
   font-size: 13px;
 }
-.nav-link i {
-  font-size: 20px;
-  font-style: normal;
-  color: var(--cyan);
+.nav-icon {
   width: 20px;
-  text-align: center;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 .nav-link.active {
   background: var(--cyan-soft);
@@ -706,8 +713,9 @@ button, input, select {
     padding: 3px;
     font-size: 9px;
   }
-  .nav-link i {
-    font-size: 18px;
+  .nav-icon {
+    width: 20px;
+    height: 20px;
   }
   .app-main {
     padding: 23px 16px;

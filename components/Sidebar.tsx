@@ -3,16 +3,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useSession } from "@/components/SessionProvider";
 
 const links = [
-  { href: "/dashboard", label: "Inicio", icon: "⌂" },
-  { href: "/chats", label: "Chats", icon: "▱" },
-  { href: "/apuntes", label: "Apuntes", icon: "▤" },
-  { href: "/perfil", label: "Perfil", icon: "♙" },
+  { href: "/dashboard", label: "Inicio", icon: "/home.png" },
+  { href: "/chats", label: "Chats", icon: "/chat_bubble.png" },
+  { href: "/apuntes", label: "Apuntes", icon: "/book-open.png" },
+  { href: "/perfil", label: "Perfil", icon: "/user.png" },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { user } = useSession();
 
   return (
     <aside className="sidebar">
@@ -39,7 +41,7 @@ export function Sidebar() {
               href={link.href}
               className={`nav-link ${isActive ? "active" : ""}`}
             >
-              <i aria-hidden="true">{link.icon}</i>
+              <Image src={link.icon} alt="" aria-hidden="true" width={24} height={24} className="nav-icon" />
               {link.label}
             </Link>
           );
@@ -47,7 +49,7 @@ export function Sidebar() {
       </nav>
 
       <Link href="/perfil" className="points">
-        🏆 245 puntos
+        🏆 {user?.points ?? 0} puntos
       </Link>
     </aside>
   );
