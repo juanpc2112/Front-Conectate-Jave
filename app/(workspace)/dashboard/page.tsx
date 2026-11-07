@@ -30,10 +30,38 @@ export default function DashboardPage() {
   }, [query, user]);
   const displayedChats = matches ?? chats;
   return <>
-    <Heading title={`Bienvenido, ${user?.name.split(" ")[0] ?? ""} 👋`}><Link className="points" href="/perfil">{user?.points ?? 0} pts <Avatar>{user?.name.slice(0, 1) ?? "?"}</Avatar></Link></Heading>
+    <Heading title={`Bienvenido, ${user?.name.split(" ")[0] ?? ""} 👋`}>
+      <Link className="points" href="/perfil">
+        {user?.points ?? 0} pts
+        <Avatar>{user?.name.slice(0, 1) ?? "?"}</Avatar>
+      </Link>
+    </Heading>
     {error && <p className="form-error" role="alert">{error}</p>}
     <label className="search"><span aria-hidden="true">⌕</span><input placeholder="Buscar chats..." value={query} onChange={(event) => setQuery(event.target.value)} /></label>
-    <section className="block"><h2>Tus materias</h2><div className="course-grid">{subjects.map((subject, index) => <Course key={subject.id} title={subject.name} professor={subject.professor} color={index} />)}</div></section>
-    <section className="block"><h2>{query ? "Resultados de búsqueda" : "Chats recientes"}</h2>{displayedChats.map((chat, index) => <Link className="row" href="/chats" key={chat.id}><Avatar color={index}>P</Avatar><span><b>{chat.subjectName}</b><small>{chat.lastMessage?.text ?? chat.professor}</small></span></Link>)}</section>
+    <section className="block">
+      <h2>Tus materias</h2>
+      <div className="course-grid">
+        {subjects.map((subject, index) => (
+          <Course
+            key={subject.id}
+            title={subject.name}
+            professor={subject.professor}
+            color={index}
+          />
+        ))}
+      </div>
+    </section>
+    <section className="block">
+      <h2>{query ? "Resultados de búsqueda" : "Chats recientes"}</h2>
+      {displayedChats.map((chat, index) => (
+        <Link className="row" href="/chats" key={chat.id}>
+          <Avatar color={index}>P</Avatar>
+          <span>
+            <b>{chat.subjectName}</b>
+            <small>{chat.lastMessage?.text ?? chat.professor}</small>
+          </span>
+        </Link>
+      ))}
+    </section>
   </>;
 }

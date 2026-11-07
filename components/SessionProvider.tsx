@@ -49,7 +49,11 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     router.replace("/");
   }, [router]);
 
-  return <SessionContext.Provider value={{ user, ready, signIn, signOut }}>{children}</SessionContext.Provider>;
+  return (
+    <SessionContext.Provider value={{ user, ready, signIn, signOut }}>
+      {children}
+    </SessionContext.Provider>
+  );
 }
 
 export function useSession() {

@@ -37,8 +37,27 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
         <label>Carrera<input name="career" required /></label>
         <label>Semestre<input name="semester" type="number" min="1" required /></label>
       </>}
-      <label>Correo electrónico<input name="email" type="email" placeholder="nombre@javerianacali.edu.co" autoComplete="email" required /></label>
-      <label>Contraseña<input name="password" type="password" placeholder="Contraseña" autoComplete={mode === "login" ? "current-password" : "new-password"} minLength={mode === "register" ? 8 : undefined} required /></label>
+      <label>
+        Correo electrónico
+        <input
+          name="email"
+          type="email"
+          placeholder="nombre@javerianacali.edu.co"
+          autoComplete="email"
+          required
+        />
+      </label>
+      <label>
+        Contraseña
+        <input
+          name="password"
+          type="password"
+          placeholder="Contraseña"
+          autoComplete={mode === "login" ? "current-password" : "new-password"}
+          minLength={mode === "register" ? 8 : undefined}
+          required
+        />
+      </label>
       {error && <p className="form-error" role="alert">{error}</p>}
       <button className="submit" type="submit" disabled={busy}>{busy ? "Enviando…" : mode === "login" ? "Ingresar" : "Crear cuenta"}</button>
     </form>
@@ -56,5 +75,15 @@ export function ForgotPasswordForm() {
       setMessage(result.message);
     } catch (cause) { setError(cause instanceof Error ? cause.message : "No se pudo completar la solicitud."); }
   }
-  return <form onSubmit={submit}><label>Correo electrónico<input name="email" type="email" required /></label>{error && <p className="form-error">{error}</p>}{message && <p>{message}</p>}<button className="submit">Enviar solicitud</button></form>;
+  return (
+    <form onSubmit={submit}>
+      <label>
+        Correo electrónico
+        <input name="email" type="email" required />
+      </label>
+      {error && <p className="form-error">{error}</p>}
+      {message && <p>{message}</p>}
+      <button className="submit">Enviar solicitud</button>
+    </form>
+  );
 }
