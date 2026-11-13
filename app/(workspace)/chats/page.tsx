@@ -27,7 +27,6 @@ export default function ChatsPage() {
 
   useEffect(() => {
     if (!user || !selected) {
-      setMessages([]);
       return;
     }
 

@@ -20,7 +20,7 @@ export default function DashboardPage() {
       .catch((cause) => setError(cause instanceof Error ? cause.message : "No se pudieron cargar los datos."));
   }, [user]);
   useEffect(() => {
-    if (!user || !query.trim()) { setMatches(null); return; }
+    if (!user || !query.trim()) return;
     const timer = setTimeout(() => {
       apiRequest<{ chats: Chat[]; notes: unknown }>(`/search?q=${encodeURIComponent(query)}&type=chats`, {}, user.id)
         .then((result) => setMatches(result.data.chats))
@@ -37,7 +37,7 @@ export default function DashboardPage() {
       </Link>
     </Heading>
     {error && <p className="form-error" role="alert">{error}</p>}
-    <label className="search"><span aria-hidden="true">⌕</span><input placeholder="Buscar chats..." value={query} onChange={(event) => setQuery(event.target.value)} /></label>
+    <label className="search"><span aria-hidden="true">⌕</span><input placeholder="Buscar chats..." value={query} onChange={(event) => { setQuery(event.target.value); setMatches(null); }} /></label>
     <section className="block">
       <h2>Tus materias</h2>
       <div className="course-grid">

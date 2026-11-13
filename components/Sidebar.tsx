@@ -9,6 +9,7 @@ const links = [
   { href: "/dashboard", label: "Inicio", icon: "/home.png" },
   { href: "/chats", label: "Chats", icon: "/chat_bubble.png" },
   { href: "/apuntes", label: "Apuntes", icon: "/book-open.png" },
+  { href: "/clases", label: "Mis clases", icon: "/book-open.png" },
   { href: "/perfil", label: "Perfil", icon: "/user.png" },
 ];
 

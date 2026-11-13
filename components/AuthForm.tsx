@@ -1,14 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { apiRequest, jsonBody, type User } from "@/lib/api";
+import { apiRequest, jsonBody, type AuthResult } from "@/lib/api";
 import { useSession } from "@/components/SessionProvider";
 
 export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [role, setRole] = useState<"student" | "professor">("student");
   const router = useRouter();
   const { signIn } = useSession();
 
@@ -18,10 +18,12 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
     setBusy(true);
     const form = new FormData(event.currentTarget);
     const payload: Record<string, FormDataEntryValue | number> = Object.fromEntries(form.entries());
-    if (mode === "register") payload.semester = Number(payload.semester);
+    if (mode === "register" && role === "student") {
+      payload.semester = Number(payload.semester);
+    }
     try {
-      const result = await apiRequest<User>(`/auth/${mode}`, { method: "POST", body: jsonBody(payload) });
-      signIn(result.data);
+      const result = await apiRequest<AuthResult>(`/auth/${mode}`, { method: "POST", body: jsonBody(payload) });
+      signIn(result.data.user, result.data.accessToken);
       router.replace("/dashboard");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "No se pudo completar la solicitud.");
@@ -32,11 +34,38 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
 
   return (
     <form onSubmit={submit}>
-      {mode === "register" && <>
-        <label>Nombre completo<input name="name" autoComplete="name" required /></label>
-        <label>Carrera<input name="career" required /></label>
-        <label>Semestre<input name="semester" type="number" min="1" required /></label>
-      </>}
+      {mode === "register" && (
+        <>
+          <label>
+            Nombre completo
+            <input name="name" autoComplete="name" required />
+          </label>
+          <label>
+            Tipo de cuenta
+            <select
+              name="role"
+              value={role}
+              onChange={(event) => setRole(event.target.value as "student" | "professor")}
+              required
+            >
+              <option value="student">Estudiante</option>
+              <option value="professor">Profesor</option>
+            </select>
+          </label>
+          {role === "student" && (
+            <>
+              <label>
+                Carrera
+                <input name="career" required />
+              </label>
+              <label>
+                Semestre
+                <input name="semester" type="number" min="1" required />
+              </label>
+            </>
+          )}
+        </>
+      )}
       <label>
         Correo electrónico
         <input

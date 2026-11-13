@@ -4,17 +4,16 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import type { User } from "@/lib/api";
+import { SESSION_STORAGE_KEY } from "@/lib/api";
 
 type SessionContextValue = {
   user: User | null;
   ready: boolean;
-  signIn: (user: User) => void;
+  signIn: (user: User, accessToken: string) => void;
   signOut: () => void;
 };
 
 const SessionContext = createContext<SessionContextValue | null>(null);
-const SESSION_KEY = "conectate-jave-user";
-
 export function SessionProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
@@ -23,10 +22,16 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(SESSION_KEY);
-      if (stored) setUser(JSON.parse(stored) as User);
+      const stored = localStorage.getItem(SESSION_STORAGE_KEY);
+      if (stored) {
+        const session = JSON.parse(stored) as { user?: User; accessToken?: string };
+        // La restauración lee una fuente externa al estado de React.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        if (session.user && session.accessToken) setUser(session.user);
+        else localStorage.removeItem(SESSION_STORAGE_KEY);
+      }
     } catch {
-      localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(SESSION_STORAGE_KEY);
     } finally {
       setReady(true);
     }
@@ -39,12 +44,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     if (user && isPublic) router.replace("/dashboard");
   }, [pathname, ready, router, user]);
 
-  const signIn = useCallback((nextUser: User) => {
-    localStorage.setItem(SESSION_KEY, JSON.stringify(nextUser));
+  const signIn = useCallback((nextUser: User, accessToken: string) => {
+    localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify({ user: nextUser, accessToken }));
     setUser(nextUser);
   }, []);
   const signOut = useCallback(() => {
-    localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(SESSION_STORAGE_KEY);
     setUser(null);
     router.replace("/");
   }, [router]);
