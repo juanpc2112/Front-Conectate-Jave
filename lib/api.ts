@@ -60,6 +60,7 @@ export type ChatMessage = {
   id: string;
   chatId: string;
   senderId: string;
+  senderName: string;
   senderRole: "student" | "professor";
   text: string;
   sentAt: string;

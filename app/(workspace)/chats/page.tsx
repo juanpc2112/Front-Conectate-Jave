@@ -140,20 +140,21 @@ export default function ChatsPage() {
             )}
             <div className="messages">
               {messages.map((message) => (
-                <p
-                  className={
-                    message.senderId === String(user?.id) ? "mine" : "theirs"
-                  }
+                <div
+                  className={`message ${message.senderId === String(user?.id) ? "mine" : "theirs"}`}
                   key={message.id}
                 >
-                  {message.text}
-                  <small>
-                    {new Date(message.sentAt).toLocaleTimeString("es-CO", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </small>
-                </p>
+                  <span className="message-sender">{message.senderName}</span>
+                  <p>
+                    {message.text}
+                    <small>
+                      {new Date(message.sentAt).toLocaleTimeString("es-CO", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </small>
+                  </p>
+                </div>
               ))}
             </div>
             <form className="composer" onSubmit={send}>
