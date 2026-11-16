@@ -440,17 +440,18 @@ button, input, select {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 16px;
   padding: 22px 0;
+  overflow-y: auto;
 }
 .messages p {
   max-width: 75%;
   margin: 0;
   padding: 10px 13px;
   border-radius: 10px;
-  background: #55575a;
-  color: #111;
+  background: #383b40;
+  color: #f2f4f5;
   font-size: 13px;
 }
 .messages p.mine {

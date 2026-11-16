@@ -30,14 +30,46 @@ export default function ChatsPage() {
       return;
     }
 
-    apiRequest<ChatMessage[]>(
-      `/chats/${encodeURIComponent(selected.id)}/messages`,
-      {},
-      user.id,
-    )
-      .then((result) => setMessages([...result.data].reverse()))
-      .catch((cause) => setError(cause.message));
-  }, [selected, user]);
+    let active = true;
+    let loading = false;
+
+    const refreshMessages = async () => {
+      if (loading) return;
+      loading = true;
+
+      try {
+        const result = await apiRequest<ChatMessage[]>(
+          `/chats/${encodeURIComponent(selected.id)}/messages`,
+          {},
+          user.id,
+        );
+
+        if (active) {
+          setMessages([...result.data].reverse());
+          setError("");
+        }
+      } catch (cause) {
+        if (active) {
+          setError(
+            cause instanceof Error
+              ? cause.message
+              : "No se pudieron cargar los mensajes.",
+          );
+        }
+      } finally {
+        loading = false;
+      }
+    };
+
+    setMessages([]);
+    void refreshMessages();
+    const intervalId = window.setInterval(() => void refreshMessages(), 2500);
+
+    return () => {
+      active = false;
+      window.clearInterval(intervalId);
+    };
+  }, [selected?.id, user?.id]);
 
   async function send(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
