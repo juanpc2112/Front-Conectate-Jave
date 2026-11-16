@@ -138,11 +138,6 @@ button, input, select {
 .login-card input:focus, .search input:focus {
   box-shadow: 0 0 0 2px var(--cyan);
 }
-.forgot {
-  color: #42bdd7;
-  font-size: 11px;
-  margin-top: -12px;
-}
 .submit {
   border: 0;
   color: white;
@@ -158,8 +153,6 @@ button, input, select {
 }
 .submit:disabled { opacity: .65; cursor: wait; }
 .form-error { margin: 0; color: #ff8d93; font-size: 12px; }
-.forgot summary { cursor: pointer; }
-.forgot form { margin-top: 12px; }
 .submit:hover {
   background: #50adc2;
 }

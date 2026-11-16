@@ -92,27 +92,3 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
     </form>
   );
 }
-
-export function ForgotPasswordForm() {
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setMessage(""); setError("");
-    const email = String(new FormData(event.currentTarget).get("email") ?? "");
-    try {
-      const result = await apiRequest<null>("/auth/forgot-password", { method: "POST", body: jsonBody({ email }) });
-      setMessage(result.message);
-    } catch (cause) { setError(cause instanceof Error ? cause.message : "No se pudo completar la solicitud."); }
-  }
-  return (
-    <form onSubmit={submit}>
-      <label>
-        Correo electrónico
-        <input name="email" type="email" required />
-      </label>
-      {error && <p className="form-error">{error}</p>}
-      {message && <p>{message}</p>}
-      <button className="submit">Enviar solicitud</button>
-    </form>
-  );
-}

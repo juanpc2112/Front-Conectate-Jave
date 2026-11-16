@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { AuthForm, ForgotPasswordForm } from "@/components/AuthForm";
+import { AuthForm } from "@/components/AuthForm";
 
 export default function LoginPage() {
   return (
@@ -35,10 +35,6 @@ export default function LoginPage() {
           <h1>Iniciar sesión</h1>
           <p>Ingresa con tu correo institucional.</p>
           <AuthForm mode="login" />
-          <details className="forgot">
-            <summary>¿Olvidaste tu contraseña?</summary>
-            <ForgotPasswordForm />
-          </details>
           <div className="divider">
             <span />o<span />
           </div>
